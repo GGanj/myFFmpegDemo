@@ -71,8 +71,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(projectDir)..\dependency\;$(projectDir)..\dependency\ffmpeg-5.1.2-full_build-shared\include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(projectDir)..\dependency\ffmpeg-5.1.2-full_build-shared\include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(projectDir)..\dependency\ffmpeg-5.1.2-full_build-shared\lib\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\$(projectName)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LibraryPath>$(projectDir)..\dependency\ffmpeg-5.1.2-full_build-shared\lib\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(projectDir)..\dependency\ffmpeg-5.1.2-full_build-shared\include\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -116,9 +121,9 @@
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y $(SolutionDir)dependency\ffmpeg-5.1.2-full_build-shared\bin\*.dll $(SolutionDir)$(Platform)\$(Configuration)
-xcopy /y $(solutionDir)dependency\*.yuv $(solutionDir)$(platform)\$(configuration)\
-xcopy /y $(solutionDir)dependency\*.mp4 $(solutionDir)$(platform)\$(configuration)\</Command>
+      <Command>xcopy /y $(SolutionDir)dependency\ffmpeg-5.1.2-full_build-shared\bin\*.dll $(SolutionDir)$(Platform)\$(Configuration)\$(projectName)
+xcopy /y $(solutionDir)dependency\*.yuv $(solutionDir)$(platform)\$(configuration)\$(projectName)
+xcopy /y $(solutionDir)dependency\*.mp4 $(solutionDir)$(platform)\$(configuration)\$(projectName)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
