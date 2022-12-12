@@ -41,10 +41,13 @@ void FFmpegRender::initCodec() {
 	if (videoStream < 0) {
 		showErrMsg("Find video stream failed");
 	}
-	pCodecContext = pFormat->streams[videoStream]->codec;
-	const AVCodec* pCodec = avcodec_find_decoder(pCodecContext->codec_id);
+
+	pCodecParameters = pFormat->streams[videoStream]->codecpar;
+	const AVCodec* pCodec = avcodec_find_decoder(pCodecParameters->codec_id);
+	pCodecContext = avcodec_alloc_context3(pCodec);
+	avcodec_parameters_to_context(pCodecContext, pCodecParameters);
 	int ret = avcodec_open2(pCodecContext, pCodec, NULL);
-	if (videoStream < 0) {
+	if (ret < 0) {
 		showErrMsg("Open codec text failed");
 	}
 }
@@ -69,7 +72,8 @@ void FFmpegRender::startRender() {
 	int go = 0;
 	while (av_read_frame(pFormat, pPacket) >= 0) {
 		if (pPacket->stream_index == AVMEDIA_TYPE_VIDEO) {
-			ret = avcodec_decode_video2(pCodecContext, pOriginFrame, &go, pPacket);
+			avcodec_send_packet(pCodecContext, pPacket);
+			ret = avcodec_receive_frame(pCodecContext, pOriginFrame);
 			if (ret < 0) {
 				continue;
 			}

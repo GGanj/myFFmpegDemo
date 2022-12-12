@@ -11,10 +11,13 @@ extern "C" {
 #include <libswscale/swscale.h>
 }
 
+//#include "OpenGLRender.h"
+
 #pragma comment(lib, "avformat.lib")
 #pragma comment(lib, "avcodec.lib")
 #pragma comment(lib, "avutil.lib")
 #pragma comment(lib, "swscale.lib")
+
 
 class FFmpegRender
 {
@@ -36,7 +39,8 @@ public:
 		int go = 0;
 		while (av_read_frame(pFormat, pPacket) >= 0) {
 			if (pPacket->stream_index == AVMEDIA_TYPE_VIDEO) {
-				ret = avcodec_decode_video2(pCodecContext, pOriginFrame, &go, pPacket);
+				avcodec_send_packet(pCodecContext, pPacket);
+				ret = avcodec_receive_frame(pCodecContext, pOriginFrame);
 				if (ret < 0) {
 					continue;
 				}
@@ -58,6 +62,7 @@ public:
 	int playerWidth = 0;
 	int playerHeight = 0;
 	AVFormatContext* pFormat = nullptr;
+	AVCodecParameters* pCodecParameters = nullptr;
 	AVCodecContext* pCodecContext = nullptr;
 	SwsContext* pSWSContext = nullptr;
 };

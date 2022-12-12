@@ -17,7 +17,7 @@
 
 #pragma comment(lib, "glu32.lib")
 #pragma comment(lib, "glut32.lib")
-#pragma comment(lib, "glew32.lib")
+//#pragma comment(lib, "glew32.lib")
 #pragma comment(lib, "OpenGL32.lib")
 
 class OpenGLRender
